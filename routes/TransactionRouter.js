@@ -22,19 +22,19 @@ router.post("/transaction",(req,res)=>{
             newuser.transactions.unshift(transaction);
             if (transaction.typeTransaction=="deposit"){
                 newuser.income=transaction.money+newuser.income;
+                newuser.balance=transaction.money+newuser.balance;
                 newuser.deposit+=transaction.money;
             }
             if (transaction.typeTransaction=="withdraw"){
-                newuser.income=newuser.income-transaction.money;
-                newuser.deposit-=transaction.money;
+                newuser.balance=newuser.balance-transaction.money;
             }
-            console.log(transaction.typeTransaction);
-            console.log(newuser.deposit);
+            //console.log(transaction.typeTransaction);
+            //console.log(newuser.deposit);
             newuser.save((err)=>{
                 console.log(err);
             });
-            console.log("transaction created");
-            console.log(newuser);
+            //console.log("transaction created");
+            //console.log(newuser);
             return res.json({success:true, transaction:transaction});
             }else{
             return res.json({success:false, message:"transaction failed"}); }

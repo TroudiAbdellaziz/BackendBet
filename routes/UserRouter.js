@@ -19,18 +19,16 @@ router.post('/user', (req, res) => {
 });
 
 router.get('/getuser/:id', (req, res) => {
-    console.log("here");
-    console.log(req.params.id);
     User.findById(req.params.id, (err, user) => {
         if (user) {
             let result =user;
             if (result.leagues.length > 8) {
-                console.log("here");
+               // console.log("here");
                 result.leagues=result.leagues.slice(0, 8);
                 
             }
             if (result.transactions.length > 7) {
-                console.log("heree");
+               // console.log("heree");
                 result.transactions=result.transactions.slice(0, 7);
                 
             }

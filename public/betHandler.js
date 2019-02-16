@@ -1,9 +1,9 @@
 const User=require('../models/user');
 
 module.exports = {
-    favoriteLeague: function(userId, bets){
-        userId=userId.toString()
-        User.findById(userId,(err,newuser)=>{
+    favoriteLeague: function(newuser, bets){
+        
+        
             if (newuser){
                 console.log(newuser.id);
                 console.log("here");
@@ -19,6 +19,13 @@ module.exports = {
                         if((bet.coteBet>newuser.highBet)||(newuser.highBet=="undefined")){
                             console.log("inssss");
                             newuser.highBet=bet.coteBet;
+                        }
+                    }else{
+                        if(newuser.worstChoice){
+                        if(bet.coteBet<newuser.worstChoice.coteBet){
+                            newuser.worstChoice=bet;
+                        }}else{
+                            newuser.worstChoice=bet;
                         }
                     }
                     for(let j=0; j<newuser.leagues.length ;j++){
@@ -52,7 +59,7 @@ module.exports = {
                     console.log(err);
                 })
             }
-        })
+       
     },
     compare:function(a,b) {
         let rateA= a.rate*0.75 + (100-a.rate*0.7)*(a.nbBets/16.7);

@@ -7,6 +7,12 @@ const TransactionSchema = mongoose.Schema({
     description: String,
     date: Date
 })
+const BetSchema = mongoose.Schema({
+    stateBet: String,
+    league: String,
+    typeBet: [String],
+    coteBet: Number,
+});
 //Define BucketlistSchema with title, description and category
 const UserSchema = mongoose.Schema({
     fname: {
@@ -17,12 +23,12 @@ const UserSchema = mongoose.Schema({
     email: String,
     papers: [String],
     password: String,
-    income: Number,
+    balance: Number,
     bets: Number,
     success: Number,
     deposits: [Number],
     deposit: Number,
-    incomePaper: [Number],
+    incomeGenerated: [Number],
     highPaper: Number,
     highStake:  Number,
     highBet:  Number,
@@ -33,7 +39,17 @@ const UserSchema = mongoose.Schema({
         name: String, 
         rate: Number,
         nbBets: Number
-    }]
+    }],
+    income:Number,
+    paperWon:Number,
+    paperLost:Number,
+    paperCompensated:Number,
+    paperCompensatedWon:Number,
+    paperCompensatedLost:Number,
+    bestBets:[
+        BetSchema
+    ],
+    worstChoice:BetSchema
 });
 const  User = module.exports = mongoose.model(' User',  UserSchema );
 

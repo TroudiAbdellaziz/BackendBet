@@ -9,8 +9,6 @@ const betHandler = require('../public/betHandler');
 router.post('/paper', (req, res) => {
     //console.log(req);
     User.findById((req.body.user),(err,newuser)=>{
-        console.log("start");
-        console.log(req.method);
         Paper.create((req.body), (err, paper) => {
         if (err) {
             return res.json({ success: false, message: `Failed to add the paper. Error: ${err}` });
@@ -33,6 +31,7 @@ router.post('/paper', (req, res) => {
                     newuser.highLoss=paper.price;
                     newuser.markModified("highLoss");
                 }
+                newuser.paperLost++;
             }
             if (paper.state=="won"){
                 console.log("in won");
@@ -40,6 +39,16 @@ router.post('/paper', (req, res) => {
                     newuser.highPaper=paper.revenue;
                     newuser.markModified("highPaper");
                 }
+                newuser.paperWon++;
+            }
+            if(paper.state=="compensated"){
+                newuser.paperCompensated++;
+                if (paper.revenue>paper.price){
+                    newuser.paperCompensatedWon++;
+                }else{
+                    newuser.paperCompensatedLost++;
+                }
+
             }
             var rate=paper.state=="won"?1:0;
             console.log("rate "+rate);
@@ -52,8 +61,9 @@ router.post('/paper', (req, res) => {
             newuser.success=((newuser.success*(newuser.nbPapers-1))+rate)/newuser.nbPapers;
             //console.log(newuser.success);
             newuser.markModified("success");
-            paper.state=="won"?newuser.income+=paper.revenue-paper.price:newuser.income-=paper.price;
-            newuser.incomePaper.push(newuser.income);
+            paper.state=="won"?newuser.balance+=(paper.revenue-paper.price):newuser.balance-=paper.price;
+            paper.state=="won"?newuser.income+=(paper.revenue-paper.price):newuser.income-=paper.price;
+            newuser.incomeGenerated.push(newuser.income);
             newuser.markModified("incomePaper");
             if (!newuser.deposits){
                 for(let i=0;i<30;i++){
@@ -68,18 +78,18 @@ router.post('/paper', (req, res) => {
                 newuser.highBet=bet.cote;
                 newuser.markModified("highBet");
             }
-            if(newuser.incomePaper.length>30)
+            if(newuser.incomeGenerated.length>30)
             {
-                newuser.incomePaper.shift();
+                newuser.incomeGenerated.shift();
                 newuser.deposits.shift();
-                newuser.markModified("incomePaper");
+                newuser.markModified("incomeGenerated");
             }
             
          /*   newuser.save((err)=>{
                 console.log(err);
             });*/
          
-            betHandler.favoriteLeague(newuser.id,paper.bets);
+            betHandler.favoriteLeague(newuser,paper.bets);
             return res.json({ success: true, user:newuser });
         }
 
