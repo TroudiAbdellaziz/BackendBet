@@ -19,7 +19,7 @@ router.post('/paper', (req, res) => {
             console.log("in paper");
             newuser.papers.push(paper.id);
             newuser.markModified("papers");
-            console.log(paper);
+            //console.log(paper);
             console.log(paper.price);
             if(paper.price>newuser.highStake){
                 console.log("in stake");
@@ -47,10 +47,10 @@ router.post('/paper', (req, res) => {
             console.log(newuser.nbPapers);
             newuser.markModified("nbPapers");
             newuser.bets=newuser.bets+paper.num;
-            console.log(newuser.bets);
+            //console.log(newuser.bets);
             newuser.markModified("bets");
-            newuser.success=(newuser.success+rate)/newuser.nbPapers;
-            console.log(newuser.success);
+            newuser.success=((newuser.success*(newuser.nbPapers-1))+rate)/newuser.nbPapers;
+            //console.log(newuser.success);
             newuser.markModified("success");
             paper.state=="won"?newuser.income+=paper.revenue-paper.price:newuser.income-=paper.price;
             newuser.incomePaper.push(newuser.income);
@@ -75,9 +75,9 @@ router.post('/paper', (req, res) => {
                 newuser.markModified("incomePaper");
             }
             
-            newuser.save((err)=>{
+         /*   newuser.save((err)=>{
                 console.log(err);
-            });
+            });*/
          
             betHandler.favoriteLeague(newuser.id,paper.bets);
             return res.json({ success: true, user:newuser });

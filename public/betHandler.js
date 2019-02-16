@@ -8,16 +8,25 @@ module.exports = {
                 console.log(newuser.id);
                 console.log("here");
                 console.log(bets);
-                let found=false;
+                
                 for (let i=0; i< bets.length;i++){
+                    let found=false;
                     bet=bets[i];
                     var rate=bet.stateBet=="won"?1:0;
-                   
-                    for(league in newuser.leagues){
-                        if (league.name==bet.league){
+                    console.log(bet);
+                    if(bet.stateBet=="won"){
+                        console.log(newuser.highBet);
+                        if((bet.coteBet>newuser.highBet)||(newuser.highBet=="undefined")){
+                            console.log("inssss");
+                            newuser.highBet=bet.coteBet;
+                        }
+                    }
+                    for(let j=0; j<newuser.leagues.length ;j++){
+
+                        if (newuser.leagues[j].name.toString()==bet.league.toString()){
                             
-                            league.nbBets++;
-                            league.rate=(league.rate+rate)/league.nbBets
+                            newuser.leagues[j].nbBets++;
+                            newuser.leagues[j].rate=(((newuser.leagues[j].rate*(newuser.leagues[j].nbBets-1))+rate)/newuser.leagues[j].nbBets);
                             found= true;
                         }
                     }

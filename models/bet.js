@@ -6,7 +6,7 @@ const BetSchema = mongoose.Schema({
     state: String,
     league: Number,
     type: Number,
-    cote: Boolean,
+    cote: Number,
 });
 const Bet = module.exports = mongoose.model('Bet', BetSchema );
 

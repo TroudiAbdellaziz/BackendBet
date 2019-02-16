@@ -5,7 +5,7 @@ const BetSchema = mongoose.Schema({
     stateBet: String,
     league: String,
     typeBet: [String],
-    coteBet: Boolean,
+    coteBet: Number,
 });
 const PaperSchema = mongoose.Schema({
    
