@@ -38,12 +38,12 @@ module.exports = {
                 }
                 console.log(newuser.leagues);
                 newuser.leagues.sort(function(a,b){
-                    let rateA= a.rate*0.75 + (100-a.rate*0.7)*(a.nbBets/16.7);
-                    let rateB= b.rate*0.75 + (100-b.rate*0.7)*(b.nbBets/16.7);
+                    let rateA= a.rate*75 + ((100-(a.rate*70))*(a.nbBets/16.7));
+                    let rateB= b.rate*75 + ((100-(b.rate*70))*(b.nbBets/16.7));
                     if (rateA < rateB)
-                      return -1;
-                    if (rateA > rateB)
                       return 1;
+                    if (rateA > rateB)
+                      return -1;
                     return 0;
                 });
                 newuser.markModified("leagues");

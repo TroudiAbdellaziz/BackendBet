@@ -23,11 +23,18 @@ router.get('/getuser/:id', (req, res) => {
     console.log(req.params.id);
     User.findById(req.params.id, (err, user) => {
         if (user) {
-            console.log(user.transactions);
-            if (user.leagues.length > 5) {
-                user.leagues.slice(0, 5);
+            let result =user;
+            if (result.leagues.length > 8) {
+                console.log("here");
+                result.leagues=result.leagues.slice(0, 8);
+                
             }
-            return res.json({ success: true, user: user });
+            if (result.transactions.length > 7) {
+                console.log("heree");
+                result.transactions=result.transactions.slice(0, 7);
+                
+            }
+            return res.json({ success: true, user: result });
         } else {
             return res.json({ success: false });
         }
