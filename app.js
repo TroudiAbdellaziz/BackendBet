@@ -20,15 +20,36 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.listen(port, () => {
     console.log(`Starting the server at port ${port}`);
 });
-
+app.use(function(req, res, next) {
+  
+    res.header("Access-Control-Allow-Origin", "*");
+  
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+    );
+    res.header("Access-Control-Allow-Headers", "*");
+  
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "content-type,x-access-token,X-Requested-With"
+    );
+  
+    res.setHeader("Access-Control-Allow-Credentials", true);
+  
+    next();
+  
+  });
 const config = require('./config/database');
 mongoose.connect(config.database);
 
-const BookRouter = require('./routes/route');
+
 const UserRouter = require('./routes/UserRouter');
-const CardRouter = require('./routes/CardRouter');
-const OrderRouter = require('./routes/OrderRouter');
-app.use('/books',BookRouter);
+const PaperRouter = require('./routes/PaperRouter');
+const BetRouter = require('./routes/BetRouter');
+const TransactionRouter = require('./routes/TransactionRouter');
+
 app.use('/user',UserRouter);
-app.use('/cards',CardRouter);
-app.use('/orders',OrderRouter);
+app.use('/papers',PaperRouter);
+app.use('/bets',BetRouter);
+app.use('/transactions', TransactionRouter);
